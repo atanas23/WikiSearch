@@ -13,7 +13,7 @@ class WikiListRemoteAdapter {
         return wikiListExternal.pages.map { externalCell ->
             val internalThumbnail = if (externalCell.thumbnail != null) {
                 WikiThumbnailInfo(
-                    url = externalCell.thumbnail.url,
+                    url = "https:" + externalCell.thumbnail.url,
                     width = externalCell.thumbnail.width,
                     height = externalCell.thumbnail.height
                 )

@@ -11,6 +11,10 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
@@ -18,11 +22,11 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
-    searchLimit: Float,
-    thumbnailLimit: Float,
     onDismissRequest: () -> Unit,
     wikiListSettingsViewModel: WikiListViewModel
 ) {
+    var searchLimit by remember { mutableStateOf(wikiListSettingsViewModel.searchLimit.value) }
+    var thumbnailLimit by remember { mutableStateOf(wikiListSettingsViewModel.thumbnailLimit.value) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -37,7 +41,7 @@ fun SettingsScreen(
                 Text("Search Results Limit: ${searchLimit.toInt()}")
                 Slider(
                     value = searchLimit,
-                    onValueChange = { wikiListSettingsViewModel.updateSearchLimit(it) },
+                    onValueChange = { searchLimit = it },
                     valueRange = 1f..100f,
                     steps = 99,
                     modifier = Modifier.fillMaxWidth()
@@ -46,7 +50,7 @@ fun SettingsScreen(
                 Text("Thumbnail Downloads Limit: ${thumbnailLimit.toInt()}")
                 Slider(
                     value = thumbnailLimit,
-                    onValueChange = { wikiListSettingsViewModel.updateThumbnailLimit(it) },
+                    onValueChange = { thumbnailLimit = it },
                     valueRange = 1f..searchLimit,
                     steps = (searchLimit - 1).toInt(),
                     modifier = Modifier.fillMaxWidth()
@@ -54,7 +58,10 @@ fun SettingsScreen(
             }
         },
         confirmButton = {
-            TextButton(onClick = onDismissRequest) {
+            TextButton(onClick = {
+                onDismissRequest()
+                wikiListSettingsViewModel.updateLimits(searchLimit, thumbnailLimit)
+            }) {
                 Text("OK")
             }
         }

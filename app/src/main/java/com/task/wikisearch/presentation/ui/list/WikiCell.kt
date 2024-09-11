@@ -25,7 +25,6 @@ fun WikiCell(thumbnailUrl: String,
              description: String,
              onClickAction: () -> Unit
 ) {
-    val thumbnailUrlFull = "https:$thumbnailUrl"
 
     ElevatedCard(
         modifier = Modifier
@@ -40,7 +39,7 @@ fun WikiCell(thumbnailUrl: String,
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = thumbnailUrlFull,
+                model = thumbnailUrl,
                 contentDescription = null,
                 modifier = Modifier
                     .size(64.dp) // Thumbnail size must be 64x64
